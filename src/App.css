@@ -1,10 +1,9 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    width: 75vw;
+    height: fit-content;
+    margin: 0 auto;
+    background-color:#232343;
+    padding: 15px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
