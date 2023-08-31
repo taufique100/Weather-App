@@ -1,18 +1,34 @@
-import React from "react";
+import React,{useState} from "react";
 import './WeatherStyle.css';
 import sunLogo from './Images/sun.png'
+import axios from "axios";
 
 
 function Weather() {
+    const [country, setCountry] = useState('')
+    const [state, setState] = useState('')
+    const [weather, setWeather] = useState('')
+    const [city, setCity] = useState('');
+    const apiKey = '381c87a95dd9d14669ceb71ea207148a';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=bihar,IN&appid=${apiKey}&units=metric`
+    const getWeather= async(e)=>{
+       axios.get(url)
+       .then((response)=>{
+        console.log(response)
+       })
+       .catch((err)=>{
+        console.log(err)
+       })
+    }
+
   return (
 
     <main>
         <div className="container">
             <div className="top">
-                <form action="/" onSubmit={'/'}></form>
-                <input type="text" placeholder="County code" style={{width:'200px', height:'50px',borderRadius:'10px'}} />
-                <input type="search" name="search" id="search-city" placeholder="Search City..." />
-                <button className="btn">Search</button>
+                    <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" placeholder="County code" style={{width:'200px', height:'50px',borderRadius:'10px'}} />
+                    <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." />
+                    <button  onClick={getWeather} className="btn">Search</button>
             </div>
             <div className="buttom" id="buttom-section">
                 <div className="left-box">
