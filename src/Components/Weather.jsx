@@ -1,13 +1,18 @@
 import React from "react";
 import './WeatherStyle.css';
 import sunLogo from './Images/sun.png'
+
+
 function Weather() {
   return (
+
     <main>
-     
         <div className="container">
             <div className="top">
+                <form action="/" onSubmit={'/'}></form>
+                <input type="text" placeholder="County code" style={{width:'200px', height:'50px',borderRadius:'10px'}} />
                 <input type="search" name="search" id="search-city" placeholder="Search City..." />
+                <button className="btn">Search</button>
             </div>
             <div className="buttom" id="buttom-section">
                 <div className="left-box">
