@@ -16,7 +16,8 @@ function Weather() {
 
     const apiKey = '381c87a95dd9d14669ceb71ea207148a';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${state},${country}&appid=${apiKey}&units=metric`
-    const getWeather= async(e)=>{
+    
+    const getWeather = async(e)=>{
        axios.get(url)
        .then((res)=>{
         console.log(res)
@@ -33,24 +34,27 @@ function Weather() {
             icon:res.data.weather[0].icon,
             feel_Like: res.data.main.feels_like,
         })
-        console.log("-----"+ weather.feel_Like)
+        // console.log("-----"+ weather.feel_Like)
        })
        .catch((err)=>{
         console.log(err)
        })
-    }
-    let iconurl = `http://openweathermap.org/img/w/${weather.icon}.png`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=bihar,In&appid=381c87a95dd9d14669ceb71ea207148a&units=metric`
 
-    useEffect(()=>{
-        getWeather();
-        axios.get(forecastUrl)
+       axios.get(forecastUrl)
         .then((res)=>{
             console.log(res)
+            setForecastData(res.data.list)
+            console.log(forecastData);
         })
         .catch((err)=>{
             console.log(err);
         })
+    }
+    let iconurl = `http://openweathermap.org/img/w/${weather.icon}.png`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${state},${country}&cnt=5&appid=${apiKey}&units=metric`
+
+    useEffect(()=>{
+        getWeather();
     },[])
 
   return (
@@ -62,6 +66,7 @@ function Weather() {
                     <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." />
                     <button  onClick={getWeather} className="btn">Search</button>
             </div>
+            
             <div className="buttom" id="buttom-section">
                 <div className="left-box">
                     <div className="weather-section-1 " id="wether-content">
@@ -74,42 +79,24 @@ function Weather() {
                                 <h2>{weather.temp} °C</h2>
                             </div>
                         </div>
-                        <div className="logo">
+                        <div className="logo" id="logo-image">
                             <img src={iconurl} alt="sunLogo" />
                             <p>{weather.description}</p>
                         </div>
                     </div>
                     <div className="weather-section-1 section-2">
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
-                        <div className="today-forcast">
-                            <p>Time 9:30</p>
-                            <img src="#" alt="logo" />
-                            <h4>Temp - 40</h4>
-                        </div>
+                        {
+                            forecastData.map((items,index)=>{
+                                return(
+                                    <div className="today-forcast" key={index} >
+                                    <p>{items.dt_txt}</p>
+                                    <img src={`http://openweathermap.org/img/w/${items.weather[0].icon}.png`} alt="logo" />
+                                    <h4> {items.main.temp} °C</h4>
+                                </div>
+                                )
+                            })
+                        }     
+                        
                     </div>
                     <div className="weather-section-1 section-3">
                         <div className="wind-quality">
@@ -134,7 +121,7 @@ function Weather() {
                         </div>
                     </div>
                 </div>
-                <div className="right-box">
+                {/* <div className="right-box">
                     <p>7 - Days Forecast</p>
                     <div className="week">
                         <div className="day" id="week-box">Today</div>
@@ -171,7 +158,7 @@ function Weather() {
                         <div className="sunLight" id="week-box">Sunney</div>
                         <div className="temp" id="week-box">31/25</div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     </main>
