@@ -1,32 +1,64 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import './WeatherStyle.css';
-import sunLogo from './Images/sun.png'
 import axios from "axios";
+import windIcon from './Images/wind.png'
+import thermoIcon from './Images/thermometer.png'
+import meter from './Images/meter.png'
+import water from './Images/water.png'
+
 
 
 function Weather() {
-    const [country, setCountry] = useState('')
-    const [state, setState] = useState('')
+    const [country, setCountry] = useState('IN')
+    const [state, setState] = useState('Narkatiaganj')
     const [weather, setWeather] = useState('')
-    const [city, setCity] = useState('');
+    const [forecastData, setForecastData] = useState([]);
+
     const apiKey = '381c87a95dd9d14669ceb71ea207148a';
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=bihar,IN&appid=${apiKey}&units=metric`
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${state},${country}&appid=${apiKey}&units=metric`
     const getWeather= async(e)=>{
        axios.get(url)
-       .then((response)=>{
-        console.log(response)
+       .then((res)=>{
+        console.log(res)
+        setWeather({
+            temp: res.data.main.temp,
+            description: res.data.weather[0].description,
+            city: res.data.name,
+            humidity: res.data.main.humidity,
+            pressure: res.data.main.pressure,
+            temp_max: res.data.main.temp_max,
+            tep_min: res.data.main.tep_min,
+            country:res.data.sys.country,
+            windSpeed: res.data.wind.speed,
+            icon:res.data.weather[0].icon,
+            feel_Like: res.data.main.feels_like,
+        })
+        console.log("-----"+ weather.feel_Like)
        })
        .catch((err)=>{
         console.log(err)
        })
     }
+    let iconurl = `http://openweathermap.org/img/w/${weather.icon}.png`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=bihar,In&appid=381c87a95dd9d14669ceb71ea207148a&units=metric`
+
+    useEffect(()=>{
+        getWeather();
+        axios.get(forecastUrl)
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    },[])
 
   return (
 
     <main>
         <div className="container">
             <div className="top">
-                    <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" placeholder="County code" style={{width:'200px', height:'50px',borderRadius:'10px'}} />
+                    <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" id="search-city" placeholder="County code" style={{width:'200px', height:'45px',borderRadius:'10px'}} />
                     <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." />
                     <button  onClick={getWeather} className="btn">Search</button>
             </div>
@@ -35,15 +67,16 @@ function Weather() {
                     <div className="weather-section-1 " id="wether-content">
                         <div className="weather-Forcast">
                             <div className="content">
-                                <h2>Madrid</h2>
-                                <p>Rain Chance - 0%</p>
+                                <h2>{weather.city},{weather.country}</h2>
+                                <p>Humidity - {weather.humidity}%</p>
                             </div>
                             <div className="content">
-                                <h2>30 C</h2>
+                                <h2>{weather.temp} °C</h2>
                             </div>
                         </div>
                         <div className="logo">
-                            <img src={sunLogo} alt="sunLogo" />
+                            <img src={iconurl} alt="sunLogo" />
+                            <p>{weather.description}</p>
                         </div>
                     </div>
                     <div className="weather-section-1 section-2">
@@ -81,22 +114,22 @@ function Weather() {
                     <div className="weather-section-1 section-3">
                         <div className="wind-quality">
                             <div className="wind">
-                                <p><span>logo</span> Real Feel</p>
-                                <h3>30 C</h3>
+                                <p><img className="icon-feels" src={thermoIcon} alt="feelsIcon"/> Real Feel</p>
+                                <h3>{weather.feel_Like} °C</h3>
                             </div>
                             <div className="wind">
-                                <p> <span>Logo</span> Chance of rain</p>
-                                <h3>30 C</h3>
+                                <p> <img className="icon-feels" src={water} alt="humidity" /> Humidity</p>
+                                <h3>{weather.humidity}%</h3>
                             </div>
                         </div>
                         <div className="wind-quality">
                             <div className="wind-speed">
-                                <p><span>Logo</span> Wind</p>
-                                <h3>32km/hr</h3>
+                                <p> <img className="icon-feels" src={windIcon} alt="wind-icon" /> Wind Speed</p>
+                                <h3>{weather.windSpeed} Km/h</h3>
                             </div>
                             <div className="wind-speed">
-                                <p><span>Logo</span> UV index</p>
-                                <h4>3</h4>
+                                <p><img className="icon-feels" src={meter} alt="pressure" /> Pressure</p>
+                                <h4>{weather.pressure} hpa</h4>
                             </div>
                         </div>
                     </div>
