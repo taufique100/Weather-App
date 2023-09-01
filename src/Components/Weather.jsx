@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React,{useState} from "react";
 import './WeatherStyle.css';
 import axios from "axios";
 import windIcon from './Images/wind.png'
@@ -13,10 +13,13 @@ function Weather() {
     const [state, setState] = useState('Narkatiaganj')
     const [weather, setWeather] = useState('')
     const [forecastData, setForecastData] = useState([]);
+    const [error, setError] = useState('')
 
     const apiKey = '381c87a95dd9d14669ceb71ea207148a';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${state},${country}&appid=${apiKey}&units=metric`
     
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${state},${country}&cnt=5&appid=${apiKey}&units=metric`
+    // eslint-disable-next-line
     const getWeather = async(e)=>{
        axios.get(url)
        .then((res)=>{
@@ -37,33 +40,31 @@ function Weather() {
         // console.log("-----"+ weather.feel_Like)
        })
        .catch((err)=>{
-        console.log(err)
+        console.log(err.response.statusText)
+        setError(err.response.statusText)
        })
 
        axios.get(forecastUrl)
         .then((res)=>{
-            console.log(res)
+            //resonse print in console
+            // console.log(res)
             setForecastData(res.data.list)
-            console.log(forecastData);
         })
         .catch((err)=>{
+            //setError(err.response.statusText)
+            //response print in console
             console.log(err);
         })
     }
     let iconurl = `http://openweathermap.org/img/w/${weather.icon}.png`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${state},${country}&cnt=5&appid=${apiKey}&units=metric`
-
-    useEffect(()=>{
-        getWeather();
-    },[])
 
   return (
-
     <main>
         <div className="container">
+            <p className="para" style={{color:'red', textAlign:'center'}}>Error - {error} - Try it by next day </p>
             <div className="top">
-                    <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" id="search-city" placeholder="County code" style={{width:'200px', height:'45px',borderRadius:'10px'}} />
-                    <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." />
+                    <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" id="search-city" placeholder="County code" style={{width:'200px', height:'45px',borderRadius:'10px'}} required />
+                    <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." required />
                     <button  onClick={getWeather} className="btn">Search</button>
             </div>
             
