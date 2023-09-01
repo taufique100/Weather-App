@@ -122,6 +122,7 @@ function Weather() {
                         </div>
                     </div>
                 </div>
+                {/* Comment section because & days Forecast data could not be fond on API server before call limit exceed. */}
                 {/* <div className="right-box">
                     <p>7 - Days Forecast</p>
                     <div className="week">
