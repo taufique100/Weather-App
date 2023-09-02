@@ -61,7 +61,7 @@ function Weather() {
   return (
     <main>
         <div className="container">
-            <p className="para" style={{color:'red', textAlign:'center'}}>Error - {error} - Try it by next day </p>
+            <p className="para" style={{color:'red', textAlign:'center'}}>{error}</p>
             <div className="top">
                     <input type="text" value={country} onChange={e=>setCountry(e.target.value)} name="county" id="search-city" placeholder="County code" style={{width:'200px', height:'45px',borderRadius:'10px'}} required />
                     <input type="text" value={state} onChange={e=>setState(e.target.value)}  name="city" id="search-city" placeholder="Search City..." required />
