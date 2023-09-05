@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import './WeatherStyle.css';
 import axios from "axios";
 import windIcon from './Images/wind.png'
@@ -57,6 +57,9 @@ function Weather() {
         })
     }
     let iconurl = `http://openweathermap.org/img/w/${weather.icon}.png`;
+    useEffect(()=>{
+        getWeather();
+    },[])
 
   return (
     <main>
